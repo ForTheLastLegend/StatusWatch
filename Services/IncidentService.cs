@@ -39,6 +39,20 @@ public class IncidentService
         return _db.QueryFirstOrDefault<Incident>(sql, new { id });
     }
 
+    public List<Incident> GetActive()
+    {
+        const string sql = @"
+            SELECT i.id, i.titre, i.description, i.statut, i.severite,
+                   i.date_debut AS DateDebut, i.date_fin AS DateFin,
+                   i.service_id AS ServiceId, s.nom AS ServiceNom
+            FROM incidents i
+            JOIN services s ON s.id = i.service_id
+            WHERE i.statut <> 'resolved'
+            ORDER BY i.date_debut DESC";
+
+        return _db.Query<Incident>(sql).ToList();
+    }
+
     public List<Incident> GetByService(int serviceId)
     {
         const string sql = @"
