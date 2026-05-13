@@ -1,0 +1,23 @@
+@page "/Services/{id:int}"
+@model StatusWatch.Pages.Services.DetailsModel
+@{
+    ViewData["Title"] = Model.Service.Nom;
+}
+
+<p><a asp-page="Index">&larr; Retour à la liste</a></p>
+
+<h1>@Model.Service.Nom</h1>
+
+<dl>
+    <dt>Catégorie</dt>
+    <dd>@Model.Service.Categorie</dd>
+
+    <dt>URL</dt>
+    <dd>@Model.Service.Url</dd>
+
+    <dt>Statut</dt>
+    <dd>@Model.Service.Statut</dd>
+
+    <dt>Description</dt>
+    <dd>@Model.Service.Description</dd>
+</dl>

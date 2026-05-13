@@ -1,7 +1,15 @@
+using System.Data;
+using Npgsql;
+using StatusWatch.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connStr));
+builder.Services.AddScoped<ServiceService>();
 
 var app = builder.Build();
 

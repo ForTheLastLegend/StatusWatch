@@ -1,0 +1,31 @@
+@page
+@model StatusWatch.Pages.Services.IndexModel
+@{
+    ViewData["Title"] = "Services";
+}
+
+<h1>Services</h1>
+
+<p>@Model.Services.Count service(s) référencé(s).</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>URL</th>
+            <th>Statut</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var s in Model.Services)
+    {
+        <tr>
+            <td><a asp-page="Details" asp-route-id="@s.Id">@s.Nom</a></td>
+            <td>@s.Categorie</td>
+            <td>@s.Url</td>
+            <td>@s.Statut</td>
+        </tr>
+    }
+    </tbody>
+</table>
