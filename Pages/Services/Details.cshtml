@@ -21,3 +21,36 @@
     <dt>Description</dt>
     <dd>@Model.Service.Description</dd>
 </dl>
+
+<h2>Incidents</h2>
+
+@if (Model.Incidents.Count == 0)
+{
+    <p>Aucun incident enregistré pour ce service.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Sévérité</th>
+                <th>Statut</th>
+                <th>Début</th>
+                <th>Fin</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var i in Model.Incidents)
+        {
+            <tr>
+                <td><a asp-page="/Incidents/Details" asp-route-id="@i.Id">@i.Titre</a></td>
+                <td>@i.Severite</td>
+                <td>@i.Statut</td>
+                <td>@i.DateDebut.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@(i.DateFin?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

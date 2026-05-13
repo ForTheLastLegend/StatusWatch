@@ -1,0 +1,29 @@
+@page "/Incidents/{id:int}"
+@model StatusWatch.Pages.Incidents.DetailsModel
+@{
+    ViewData["Title"] = Model.Incident.Titre;
+}
+
+<p><a asp-page="Index">&larr; Retour à la liste</a></p>
+
+<h1>@Model.Incident.Titre</h1>
+
+<dl>
+    <dt>Service</dt>
+    <dd><a asp-page="/Services/Details" asp-route-id="@Model.Incident.ServiceId">@Model.Incident.ServiceNom</a></dd>
+
+    <dt>Statut</dt>
+    <dd>@Model.Incident.Statut</dd>
+
+    <dt>Sévérité</dt>
+    <dd>@Model.Incident.Severite</dd>
+
+    <dt>Début</dt>
+    <dd>@Model.Incident.DateDebut.ToString("dd/MM/yyyy HH:mm")</dd>
+
+    <dt>Fin</dt>
+    <dd>@(Model.Incident.DateFin?.ToString("dd/MM/yyyy HH:mm") ?? "en cours")</dd>
+
+    <dt>Description</dt>
+    <dd>@Model.Incident.Description</dd>
+</dl>

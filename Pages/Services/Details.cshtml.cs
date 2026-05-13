@@ -8,12 +8,15 @@ namespace StatusWatch.Pages.Services;
 public class DetailsModel : PageModel
 {
     private readonly ServiceService _services;
+    private readonly IncidentService _incidents;
 
     public Service Service { get; set; } = default!;
+    public List<Incident> Incidents { get; set; } = new();
 
-    public DetailsModel(ServiceService services)
+    public DetailsModel(ServiceService services, IncidentService incidents)
     {
         _services = services;
+        _incidents = incidents;
     }
 
     public IActionResult OnGet(int id)
@@ -25,6 +28,7 @@ public class DetailsModel : PageModel
         }
 
         Service = service;
+        Incidents = _incidents.GetByService(id);
         return Page();
     }
 }

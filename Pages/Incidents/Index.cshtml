@@ -1,0 +1,35 @@
+@page
+@model StatusWatch.Pages.Incidents.IndexModel
+@{
+    ViewData["Title"] = "Incidents";
+}
+
+<h1>Incidents</h1>
+
+<p>@Model.Incidents.Count incident(s) au total.</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Service</th>
+            <th>Sévérité</th>
+            <th>Statut</th>
+            <th>Début</th>
+            <th>Fin</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var i in Model.Incidents)
+    {
+        <tr>
+            <td><a asp-page="Details" asp-route-id="@i.Id">@i.Titre</a></td>
+            <td>@i.ServiceNom</td>
+            <td>@i.Severite</td>
+            <td>@i.Statut</td>
+            <td>@i.DateDebut.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>@(i.DateFin?.ToString("dd/MM/yyyy HH:mm") ?? "—")</td>
+        </tr>
+    }
+    </tbody>
+</table>

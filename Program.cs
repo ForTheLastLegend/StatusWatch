@@ -10,6 +10,7 @@ builder.Services.AddRazorPages();
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connStr));
 builder.Services.AddScoped<ServiceService>();
+builder.Services.AddScoped<IncidentService>();
 
 var app = builder.Build();
 
