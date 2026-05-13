@@ -1,0 +1,48 @@
+@page
+@model StatusWatch.Pages.Admin.Services.CreateModel
+@{
+    ViewData["Title"] = "Nouveau service";
+}
+
+<h1>Nouveau service</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Nom" class="form-label">Nom</label>
+        <input asp-for="Service.Nom" class="form-control" />
+        <span asp-validation-for="Service.Nom" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Description" class="form-label">Description</label>
+        <textarea asp-for="Service.Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Service.Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Url" class="form-label">URL</label>
+        <input asp-for="Service.Url" class="form-control" />
+        <span asp-validation-for="Service.Url" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Categorie" class="form-label">Catégorie</label>
+        <input asp-for="Service.Categorie" class="form-control" />
+        <span asp-validation-for="Service.Categorie" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Statut" class="form-label">Statut</label>
+        <select asp-for="Service.Statut" asp-items="Model.StatutOptions" class="form-select"></select>
+        <span asp-validation-for="Service.Statut" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+    <a asp-page="Index" class="btn btn-link">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

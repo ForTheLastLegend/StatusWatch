@@ -1,0 +1,36 @@
+@page
+@model StatusWatch.Pages.Admin.Services.IndexModel
+@{
+    ViewData["Title"] = "Admin - Services";
+}
+
+<h1>Gestion des services</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Nouveau service</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Statut</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var s in Model.Services)
+    {
+        <tr>
+            <td>@s.Nom</td>
+            <td>@s.Categorie</td>
+            <td>@s.Statut</td>
+            <td>
+                <a asp-page="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline-secondary">Modifier</a>
+                <a asp-page="Delete" asp-route-id="@s.Id" class="btn btn-sm btn-outline-danger">Supprimer</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

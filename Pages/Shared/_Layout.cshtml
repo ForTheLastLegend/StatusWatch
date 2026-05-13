@@ -29,6 +29,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Incidents/Index">Incidents</a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Admin/Services/Index">Admin</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity?.IsAuthenticated == true)
@@ -57,6 +63,14 @@
         </nav>
     </header>
     <div class="container">
+        @if (TempData["Message"] is string msg)
+        {
+            <div class="alert alert-success" role="alert">@msg</div>
+        }
+        @if (TempData["Error"] is string err)
+        {
+            <div class="alert alert-danger" role="alert">@err</div>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
