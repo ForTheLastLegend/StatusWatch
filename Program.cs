@@ -1,6 +1,7 @@
 using System.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Npgsql;
+using StatusWatch.BackgroundServices;
 using StatusWatch.Helpers;
 using StatusWatch.Models;
 using StatusWatch.Services;
@@ -15,7 +16,11 @@ builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connStr));
 builder.Services.AddScoped<ServiceService>();
 builder.Services.AddScoped<IncidentService>();
 builder.Services.AddScoped<IncidentUpdateService>();
+builder.Services.AddScoped<PingService>();
 builder.Services.AddScoped<UserService>();
+
+builder.Services.AddHttpClient();
+builder.Services.AddHostedService<PingBackgroundService>();
 
 builder.Services
     .AddAuthentication("CookieAuth")
