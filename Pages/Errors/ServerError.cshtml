@@ -1,0 +1,14 @@
+@page "/Errors/500"
+@model StatusWatch.Pages.Errors.ServerErrorModel
+@{
+    ViewData["Title"] = "Erreur serveur";
+}
+
+<div class="text-center py-5">
+    <h1 class="display-4">500</h1>
+    <h2>Erreur serveur</h2>
+    <p class="text-muted">Une erreur inattendue est survenue. Réessaye dans un instant.</p>
+    <p>
+        <a asp-page="/Index" class="btn btn-primary">Retour à l'accueil</a>
+    </p>
+</div>
