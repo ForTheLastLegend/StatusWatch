@@ -65,4 +65,32 @@ public class IncidentService
 
         return _db.Query<Incident>(sql, new { serviceId }).ToList();
     }
+
+    public int Create(Incident i)
+    {
+        const string sql = @"
+            INSERT INTO incidents (titre, description, statut, severite, date_debut, date_fin, service_id)
+            VALUES (@Titre, @Description, @Statut, @Severite, @DateDebut, @DateFin, @ServiceId)
+            RETURNING id";
+
+        return _db.ExecuteScalar<int>(sql, i);
+    }
+
+    public void Update(Incident i)
+    {
+        const string sql = @"
+            UPDATE incidents
+            SET titre = @Titre, description = @Description, statut = @Statut,
+                severite = @Severite, date_debut = @DateDebut, date_fin = @DateFin,
+                service_id = @ServiceId
+            WHERE id = @Id";
+
+        _db.Execute(sql, i);
+    }
+
+    public void Delete(int id)
+    {
+        const string sql = "DELETE FROM incidents WHERE id = @id";
+        _db.Execute(sql, new { id });
+    }
 }

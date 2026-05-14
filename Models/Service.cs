@@ -6,7 +6,7 @@ public class Service
 {
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "Le nom est requis.")]
+    [Required(ErrorMessage = "Le nom est requis")]
     [StringLength(100)]
     public string Nom { get; set; } = "";
 

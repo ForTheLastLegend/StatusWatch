@@ -1,0 +1,62 @@
+@page "{id:int}"
+@model StatusWatch.Pages.Admin.Incidents.EditModel
+@{
+    ViewData["Title"] = "Modifier l'incident";
+}
+
+<h1>Modifier l'incident</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="Incident.Id" />
+
+    <div class="mb-3">
+        <label asp-for="Incident.Titre" class="form-label">Titre</label>
+        <input asp-for="Incident.Titre" class="form-control" />
+        <span asp-validation-for="Incident.Titre" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Incident.Description" class="form-label">Description</label>
+        <textarea asp-for="Incident.Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Incident.Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Incident.ServiceId" class="form-label">Service</label>
+        <select asp-for="Incident.ServiceId" asp-items="Model.ServiceOptions" class="form-select"></select>
+        <span asp-validation-for="Incident.ServiceId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Incident.Severite" class="form-label">Sévérité</label>
+        <select asp-for="Incident.Severite" asp-items="Model.SeveriteOptions" class="form-select"></select>
+        <span asp-validation-for="Incident.Severite" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Incident.Statut" class="form-label">Statut</label>
+        <select asp-for="Incident.Statut" asp-items="Model.StatutOptions" class="form-select"></select>
+        <span asp-validation-for="Incident.Statut" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Incident.DateDebut" class="form-label">Début</label>
+        <input asp-for="Incident.DateDebut" type="datetime-local" class="form-control" />
+        <span asp-validation-for="Incident.DateDebut" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Incident.DateFin" class="form-label">Fin (si résolu)</label>
+        <input asp-for="Incident.DateFin" type="datetime-local" class="form-control" />
+        <span asp-validation-for="Incident.DateFin" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-page="/Incidents/Index" class="btn btn-link">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,31 @@
+@page "{id:int}"
+@model StatusWatch.Pages.Admin.Incidents.DeleteModel
+@{
+    ViewData["Title"] = "Supprimer l'incident";
+}
+
+<h1>Supprimer l'incident</h1>
+
+<p>Confirmer la suppression de l'incident ci-dessous ? Cette action est irréversible</p>
+
+<dl>
+    <dt>Titre</dt>
+    <dd>@Model.Incident.Titre</dd>
+
+    <dt>Service</dt>
+    <dd>@Model.Incident.ServiceNom</dd>
+
+    <dt>Sévérité</dt>
+    <dd>@Model.Incident.Severite</dd>
+
+    <dt>Statut</dt>
+    <dd>@Model.Incident.Statut</dd>
+
+    <dt>Début</dt>
+    <dd>@Model.Incident.DateDebut.ToString("dd/MM/yyyy HH:mm")</dd>
+</dl>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+    <a asp-page="/Incidents/Index" class="btn btn-link">Annuler</a>
+</form>
