@@ -132,11 +132,17 @@ public class IncidentService
             VALUES (@Titre, @Description, @Statut, @Severite, @DateDebut, @DateFin, @ServiceId)
             RETURNING id";
 
-        return _db.ExecuteScalar<int>(sql, i);
+        var newId = _db.ExecuteScalar<int>(sql, i);
+        RecalculateServiceStatus(i.ServiceId);
+        return newId;
     }
 
     public void Update(Incident i)
     {
+        // on lit l'ancien service_id pour gérer le cas où l'incident change de service
+        var oldServiceId = _db.QueryFirstOrDefault<int?>(
+            "SELECT service_id FROM incidents WHERE id = @Id", new { i.Id });
+
         const string sql = @"
             UPDATE incidents
             SET titre = @Titre, description = @Description, statut = @Statut,
@@ -145,11 +151,59 @@ public class IncidentService
             WHERE id = @Id";
 
         _db.Execute(sql, i);
+
+        RecalculateServiceStatus(i.ServiceId);
+        if (oldServiceId.HasValue && oldServiceId.Value != i.ServiceId)
+        {
+            RecalculateServiceStatus(oldServiceId.Value);
+        }
     }
 
     public void Delete(int id)
     {
-        const string sql = "DELETE FROM incidents WHERE id = @id";
-        _db.Execute(sql, new { id });
+        var serviceId = _db.QueryFirstOrDefault<int?>(
+            "SELECT service_id FROM incidents WHERE id = @id", new { id });
+
+        _db.Execute("DELETE FROM incidents WHERE id = @id", new { id });
+
+        if (serviceId.HasValue)
+        {
+            RecalculateServiceStatus(serviceId.Value);
+        }
+    }
+
+    public bool HasActiveIncidents(int serviceId)
+    {
+        const string sql = @"
+            SELECT COUNT(*) FROM incidents
+            WHERE service_id = @serviceId AND statut <> 'resolved'";
+
+        return _db.ExecuteScalar<int>(sql, new { serviceId }) > 0;
+    }
+
+    private void RecalculateServiceStatus(int serviceId)
+    {
+        const string activesSql = @"
+            SELECT severite FROM incidents
+            WHERE service_id = @serviceId AND statut <> 'resolved'";
+
+        var actives = _db.Query<string>(activesSql, new { serviceId }).ToList();
+
+        string newStatut;
+        if (actives.Count == 0)
+        {
+            newStatut = "operational";
+        }
+        else if (actives.Any(s => s == "critical" || s == "major"))
+        {
+            newStatut = "outage";
+        }
+        else
+        {
+            newStatut = "degraded";
+        }
+
+        _db.Execute("UPDATE services SET statut = @newStatut WHERE id = @serviceId",
+            new { newStatut, serviceId });
     }
 }

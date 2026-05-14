@@ -6,7 +6,16 @@
 
 <h1>Supprimer le service</h1>
 
-<p>Confirmer la suppression du service ci-dessous ? Cette action est irréversible</p>
+@if (Model.HasActiveIncidents)
+{
+    <div class="alert alert-warning">
+        Ce service a des incidents actifs (non résolus). La suppression est bloquée tant qu'ils ne sont pas tous résolus ou supprimés.
+    </div>
+}
+else
+{
+    <p>Confirmer la suppression du service ci-dessous ? Cette action est irréversible</p>
+}
 
 <dl>
     <dt>Nom</dt>
@@ -21,6 +30,8 @@
 
 <form method="post">
     <input type="hidden" asp-for="Service.Id" />
-    <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+    <button type="submit" class="btn btn-danger" disabled="@Model.HasActiveIncidents">
+        Supprimer définitivement
+    </button>
     <a asp-page="Index" class="btn btn-link">Annuler</a>
 </form>
