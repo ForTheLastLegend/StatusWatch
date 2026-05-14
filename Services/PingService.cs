@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using StatusWatch.Models;
 
 namespace StatusWatch.Services;
 
@@ -52,5 +53,42 @@ public class PingService
 
         _db.Execute("UPDATE services SET statut = @newStatut WHERE id = @serviceId",
             new { newStatut, serviceId });
+    }
+
+    // pourcentage de pings "up" sur les @days derniers jours ; null si aucune donnee
+    public double? GetUptimePercent(int serviceId, int days = 30)
+    {
+        const string sql = @"
+            SELECT
+                COUNT(*) AS total,
+                COUNT(*) FILTER (WHERE statut = 'up') AS up_count
+            FROM ping_logs
+            WHERE service_id = @serviceId
+              AND checked_at >= NOW() - make_interval(days => @days)";
+
+        var row = _db.QuerySingle<(long total, long up_count)>(sql, new { serviceId, days });
+        if (row.total == 0)
+        {
+            return null;
+        }
+        return Math.Round((double)row.up_count * 100.0 / row.total, 2);
+    }
+
+    // derniers pings du service (par defaut sur les @hours dernieres heures), du plus recent au plus ancien
+    public List<PingLog> GetLatencyHistory(int serviceId, int hours = 24)
+    {
+        const string sql = @"
+            SELECT
+                id AS Id,
+                service_id AS ServiceId,
+                statut AS Statut,
+                latence_ms AS LatenceMs,
+                checked_at AS CheckedAt
+            FROM ping_logs
+            WHERE service_id = @serviceId
+              AND checked_at >= NOW() - make_interval(hours => @hours)
+            ORDER BY checked_at DESC";
+
+        return _db.Query<PingLog>(sql, new { serviceId, hours }).ToList();
     }
 }
