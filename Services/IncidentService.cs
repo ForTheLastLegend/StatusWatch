@@ -1,4 +1,6 @@
 using System.Data;
+using System.Globalization;
+using System.Text;
 using Dapper;
 using StatusWatch.Models;
 
@@ -170,6 +172,37 @@ public class IncidentService
         {
             RecalculateServiceStatus(serviceId.Value);
         }
+    }
+
+    // exporte tous les incidents au format CSV (separateur ';', compatible Excel FR)
+    public string ExportCsv()
+    {
+        var incidents = GetAll();
+        var sb = new StringBuilder();
+        sb.AppendLine("titre;service;severite;statut;date_debut;date_fin");
+
+        foreach (var i in incidents)
+        {
+            sb.Append(EscapeCsv(i.Titre)).Append(';');
+            sb.Append(EscapeCsv(i.ServiceNom ?? "")).Append(';');
+            sb.Append(i.Severite).Append(';');
+            sb.Append(i.Statut).Append(';');
+            sb.Append(i.DateDebut.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)).Append(';');
+            sb.Append(i.DateFin?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture) ?? "");
+            sb.AppendLine();
+        }
+
+        return sb.ToString();
+    }
+
+    // entoure de guillemets si la valeur contient ; " ou un saut de ligne ; double les " internes
+    private static string EscapeCsv(string value)
+    {
+        if (value.Contains(';') || value.Contains('"') || value.Contains('\n') || value.Contains('\r'))
+        {
+            return "\"" + value.Replace("\"", "\"\"") + "\"";
+        }
+        return value;
     }
 
     public bool HasActiveIncidents(int serviceId)

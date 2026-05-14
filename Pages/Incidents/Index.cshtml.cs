@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StatusWatch.Models;
@@ -48,5 +49,18 @@ public class IndexModel : PageModel
         }
 
         Incidents = _incidents.Search(Search, Statut, Severite, CurrentPage, PageSize);
+    }
+
+    public IActionResult OnGetExport()
+    {
+        if (!User.IsInRole("Admin"))
+        {
+            return Forbid();
+        }
+
+        var csv = _incidents.ExportCsv();
+        // prefixe UTF-8 BOM pour qu'Excel detecte le bon encodage (sinon les accents passent en mojibake)
+        var bytes = new byte[] { 0xEF, 0xBB, 0xBF }.Concat(Encoding.UTF8.GetBytes(csv)).ToArray();
+        return File(bytes, "text/csv", "incidents.csv");
     }
 }
