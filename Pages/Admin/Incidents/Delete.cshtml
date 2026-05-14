@@ -16,10 +16,10 @@
     <dd>@Model.Incident.ServiceNom</dd>
 
     <dt>Sévérité</dt>
-    <dd>@Model.Incident.Severite</dd>
+    <dd><partial name="_StatusBadge" model="@Model.Incident.Severite" /></dd>
 
     <dt>Statut</dt>
-    <dd>@Model.Incident.Statut</dd>
+    <dd><partial name="_StatusBadge" model="@Model.Incident.Statut" /></dd>
 
     <dt>Début</dt>
     <dd>@Model.Incident.DateDebut.ToString("dd/MM/yyyy HH:mm")</dd>

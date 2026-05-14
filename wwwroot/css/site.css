@@ -8,17 +8,165 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
 html {
   position: relative;
   min-height: 100%;
 }
 
+/* fond global : bleu nuit avec un leger degrade pour eviter le noir plat */
+/* font Inter chargee depuis Google Fonts dans _Layout.cshtml */
 body {
   margin-bottom: 60px;
+  background: linear-gradient(180deg, #0b1220 0%, #111827 100%);
+  color: #e5e7eb;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* la navbar et les titres respirent mieux avec un tracking serre */
+.navbar-brand,
+h1, h2, h3, h4, h5, h6,
+.display-1, .display-2, .display-3, .display-4, .display-5 {
+  letter-spacing: -0.01em;
+}
+
+/* focus ring : version dark-mode (l'original Microsoft etait blanc, illisible ici) */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem #0b1220, 0 0 0 0.25rem #3b82f6;
+}
+
+/* cartes : fond legerement plus clair que le body pour les faire ressortir */
+.card {
+  background-color: #1f2937;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* tables : meme principe */
+.table {
+  --bs-table-bg: #1f2937;
+  --bs-table-color: #e5e7eb;
+  --bs-table-striped-bg: #243042;
+  --bs-table-hover-bg: #2a364c;
+  --bs-table-border-color: rgba(255, 255, 255, 0.08);
+}
+
+.table-light {
+  --bs-table-bg: #111827;
+  --bs-table-color: #cbd5e1;
+}
+
+/* lien dans une card-title : un peu plus clair que le bleu Bootstrap par defaut */
+.card-title a {
+  color: #93c5fd;
+}
+.card-title a:hover {
+  color: #bfdbfe;
+}
+
+/* legende contextuelle : badges plus petits que dans le contenu principal */
+.status-legend .badge {
+  padding: 0.2rem !important;
+  font-size: 0.8rem !important;
+}
+
+/*
+   Glassmorphism pour les badges de statut.
+   Code de base : /* From https://css.glass */ (rgba 0.21 / blur 5.7px / radius 16px).
+   Une variante par couleur, la teinte rgba matche le statut.
+   Couleur de texte = version claire (~lightness 75%) de la teinte pour lisibilite sur fond dark.
+*/
+.badge-glass {
+  border-radius: 16px !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.7px);
+  -webkit-backdrop-filter: blur(5.7px);
+}
+
+.badge-glass-success {
+  background: rgba(25, 135, 84, 0.21) !important;
+  border: 1px solid rgba(25, 135, 84, 0.45);
+  color: #4ade80 !important;
+}
+.badge-glass-danger {
+  background: rgba(220, 53, 69, 0.21) !important;
+  border: 1px solid rgba(220, 53, 69, 0.45);
+  color: #fca5a5 !important;
+}
+.badge-glass-warning {
+  background: rgba(255, 193, 7, 0.21) !important;
+  border: 1px solid rgba(255, 193, 7, 0.45);
+  color: #fde047 !important;
+}
+.badge-glass-info {
+  background: rgba(13, 202, 240, 0.21) !important;
+  border: 1px solid rgba(13, 202, 240, 0.45);
+  color: #67e8f9 !important;
+}
+.badge-glass-primary {
+  background: rgba(13, 110, 253, 0.21) !important;
+  border: 1px solid rgba(13, 110, 253, 0.45);
+  color: #93c5fd !important;
+}
+.badge-glass-secondary {
+  background: rgba(108, 117, 125, 0.21) !important;
+  border: 1px solid rgba(108, 117, 125, 0.45);
+  color: #cbd5e1 !important;
+}
+.badge-glass-major {
+  background: rgba(194, 65, 12, 0.21) !important;
+  border: 1px solid rgba(194, 65, 12, 0.45);
+  color: #fdba74 !important;
+}
+
+/* pulse sur les badges qui demandent une action immediate (outage, critical) */
+/* halo qui s'etale puis disparait, cycle de 2s, infini */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(220, 53, 69, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 8px rgba(220, 53, 69, 0);
+  }
+}
+.badge-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* KPI cards : meme look que .card mais avec accent typo */
+.kpi-card .display-4 {
+  line-height: 1.1;
+  font-weight: 700;
+}
+.kpi-card .text-uppercase {
+  letter-spacing: 0.06em;
+}
+
+/* sparkline 24h sur les service cards */
+/* chaque barre = 1 ping, gauche = ancien, droite = recent */
+.sparkline {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 14px;
+  max-width: 220px;
+}
+.sparkbar {
+  flex: 1 1 auto;
+  height: 100%;
+  border-radius: 1px;
+  min-width: 2px;
+}
+.sparkbar-up {
+  background-color: rgba(74, 222, 128, 0.65);
+}
+.sparkbar-down {
+  background-color: rgba(252, 165, 165, 0.85);
+}
+
+/* evite que le contenu trop long ne pousse le badge hors de la carte */
+.min-width-0 {
+  min-width: 0;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

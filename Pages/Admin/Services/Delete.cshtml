@@ -25,7 +25,7 @@ else
     <dd>@Model.Service.Categorie</dd>
 
     <dt>Statut</dt>
-    <dd>@Model.Service.Statut</dd>
+    <dd><partial name="_StatusBadge" model="@Model.Service.Statut" /></dd>
 </dl>
 
 <form method="post">

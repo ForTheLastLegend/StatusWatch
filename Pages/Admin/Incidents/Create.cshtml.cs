@@ -20,17 +20,17 @@ public class CreateModel : PageModel
 
     public List<SelectListItem> StatutOptions { get; } = new()
     {
-        new("investigating", "investigating"),
-        new("identified", "identified"),
-        new("monitoring", "monitoring"),
-        new("resolved", "resolved")
+        new("investigating", "En investigation"),
+        new("identified", "Identifié"),
+        new("monitoring", "Surveillance"),
+        new("resolved", "Résolu")
     };
 
     public List<SelectListItem> SeveriteOptions { get; } = new()
     {
-        new("minor", "minor"),
-        new("major", "major"),
-        new("critical", "critical")
+        new("minor", "Mineur"),
+        new("major", "Majeur"),
+        new("critical", "Critique")
     };
 
     public CreateModel(IncidentService incidents, ServiceService services)

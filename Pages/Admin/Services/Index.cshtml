@@ -25,10 +25,14 @@
         <tr>
             <td>@s.Nom</td>
             <td>@s.Categorie</td>
-            <td>@s.Statut</td>
+            <td><partial name="_StatusBadge" model="@s.Statut" /></td>
             <td>
-                <a asp-page="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline-secondary">Modifier</a>
-                <a asp-page="Delete" asp-route-id="@s.Id" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                <a asp-page="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline-secondary" title="Modifier">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a asp-page="Delete" asp-route-id="@s.Id" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                    <i class="bi bi-trash"></i>
+                </a>
             </td>
         </tr>
     }

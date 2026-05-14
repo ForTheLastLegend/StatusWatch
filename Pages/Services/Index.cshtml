@@ -4,28 +4,47 @@
     ViewData["Title"] = "Services";
 }
 
-<h1>Services</h1>
+<h1 class="h3 mb-3">
+    <i class="bi bi-hdd-network me-1"></i>Services
+    <span class="badge bg-secondary">@Model.Services.Count</span>
+</h1>
 
-<p>@Model.Services.Count service(s) référencé(s).</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Catégorie</th>
-            <th>URL</th>
-            <th>Statut</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var s in Model.Services)
-    {
-        <tr>
-            <td><a asp-page="Details" asp-route-id="@s.Id">@s.Nom</a></td>
-            <td>@s.Categorie</td>
-            <td>@s.Url</td>
-            <td>@s.Statut</td>
-        </tr>
-    }
-    </tbody>
-</table>
+@if (Model.Services.Count == 0)
+{
+    <p class="text-muted">Aucun service enregistré.</p>
+}
+else
+{
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Nom</th>
+                    <th>Catégorie</th>
+                    <th>URL</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var s in Model.Services)
+            {
+                <tr>
+                    <td>
+                        <a asp-page="Details" asp-route-id="@s.Id" class="text-decoration-none fw-semibold">
+                            @s.Nom
+                        </a>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(s.Categorie))
+                        {
+                            <span class="badge bg-secondary">@s.Categorie</span>
+                        }
+                    </td>
+                    <td class="small text-muted">@s.Url</td>
+                    <td><partial name="_StatusBadge" model="@s.Statut" /></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,37 @@
+@*
+    Pastille colorée (effet glassmorphism, cf. site.css ".badge-glass-*") avec icône + label français.
+    Le model est la string brute en anglais issue de la BDD (ex: "operational", "critical", "investigating").
+*@
+@model string
+
+@{
+    var (glassClass, icon, label) = Model switch
+    {
+        // statuts service
+        "operational" => ("badge-glass-success", "bi-check-circle-fill", "Opérationnel"),
+        "degraded" => ("badge-glass-warning", "bi-exclamation-triangle-fill", "Dégradé"),
+        "outage" => ("badge-glass-danger", "bi-x-circle-fill", "Panne"),
+
+        // statuts incident
+        "investigating" => ("badge-glass-secondary", "bi-search", "En investigation"),
+        "identified" => ("badge-glass-info", "bi-eye-fill", "Identifié"),
+        "monitoring" => ("badge-glass-primary", "bi-binoculars-fill", "Surveillance"),
+        "resolved" => ("badge-glass-success", "bi-check-circle", "Résolu"),
+
+        // severite incident
+        "minor" => ("badge-glass-warning", "bi-info-circle-fill", "Mineur"),
+        "major" => ("badge-glass-major", "bi-exclamation-octagon-fill", "Majeur"),
+        "critical" => ("badge-glass-danger", "bi-fire", "Critique"),
+
+        _ => ("badge-glass-secondary", "bi-question-circle", Model ?? "?")
+    };
+
+    // pulse visuel sur les statuts qui demandent une action immediate
+    var pulseClass = Model is "outage" or "critical" ? "badge-pulse" : "";
+}
+
+<span class="badge badge-glass @glassClass @pulseClass d-inline-flex align-items-center gap-2 px-3 py-2 fs-6"
+      title="@label">
+    <i class="bi @icon fs-5"></i>
+    <span>@label</span>
+</span>

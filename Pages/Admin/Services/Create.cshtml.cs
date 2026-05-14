@@ -17,9 +17,9 @@ public class CreateModel : PageModel
 
     public List<SelectListItem> StatutOptions { get; } = new()
     {
-        new("operational", "operational"),
-        new("degraded", "degraded"),
-        new("outage", "outage")
+        new("operational", "Opérationnel"),
+        new("degraded", "Dégradé"),
+        new("outage", "Panne")
     };
 
     public CreateModel(ServiceService services)

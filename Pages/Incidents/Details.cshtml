@@ -4,46 +4,67 @@
     ViewData["Title"] = Model.Incident.Titre;
 }
 
-<p><a asp-page="Index">&larr; Retour à la liste</a></p>
+<p>
+    <a asp-page="Index" class="text-decoration-none">
+        <i class="bi bi-arrow-left"></i> Retour à la liste
+    </a>
+</p>
 
-<div class="d-flex justify-content-between align-items-start">
-    <h1>@Model.Incident.Titre</h1>
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h1 class="h3 mb-2">@Model.Incident.Titre</h1>
+        <div class="d-flex gap-2">
+            <partial name="_StatusBadge" model="@Model.Incident.Severite" />
+            <partial name="_StatusBadge" model="@Model.Incident.Statut" />
+        </div>
+    </div>
     @if (User.IsInRole("Admin"))
     {
         <a asp-page="/Admin/Incidents/Updates" asp-route-id="@Model.Incident.Id" class="btn btn-outline-primary">
-            Gérer les mises à jour
+            <i class="bi bi-chat-square-text me-1"></i>Gérer les mises à jour
         </a>
     }
 </div>
 
-<dl>
-    <dt>Service</dt>
-    <dd><a asp-page="/Services/Details" asp-route-id="@Model.Incident.ServiceId">@Model.Incident.ServiceNom</a></dd>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Service</dt>
+            <dd class="col-sm-9">
+                <a asp-page="/Services/Details" asp-route-id="@Model.Incident.ServiceId" class="text-decoration-none">
+                    <i class="bi bi-hdd-network"></i> @Model.Incident.ServiceNom
+                </a>
+            </dd>
 
-    <dt>Statut</dt>
-    <dd>@Model.Incident.Statut</dd>
+            <dt class="col-sm-3">Début</dt>
+            <dd class="col-sm-9">@Model.Incident.DateDebut.ToString("dd/MM/yyyy HH:mm")</dd>
 
-    <dt>Sévérité</dt>
-    <dd>@Model.Incident.Severite</dd>
+            <dt class="col-sm-3">Fin</dt>
+            <dd class="col-sm-9">
+                @if (Model.Incident.DateFin.HasValue)
+                {
+                    @Model.Incident.DateFin.Value.ToString("dd/MM/yyyy HH:mm")
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> en cours</span>
+                }
+            </dd>
 
-    <dt>Début</dt>
-    <dd>@Model.Incident.DateDebut.ToString("dd/MM/yyyy HH:mm")</dd>
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@(Model.Incident.Description ?? "—")</dd>
+        </dl>
+    </div>
+</div>
 
-    <dt>Fin</dt>
-    <dd>@(Model.Incident.DateFin?.ToString("dd/MM/yyyy HH:mm") ?? "en cours")</dd>
-
-    <dt>Description</dt>
-    <dd>@Model.Incident.Description</dd>
-</dl>
-
-<h3 class="mt-4">Mises à jour</h3>
+<h3 class="h5 mb-3"><i class="bi bi-chat-square-text me-1"></i>Mises à jour</h3>
 @if (Model.Updates.Count == 0)
 {
     <p class="text-muted">Aucune mise à jour publiée.</p>
 }
 else
 {
-    <ul class="list-group">
+    <ul class="list-group shadow-sm">
         @foreach (var u in Model.Updates)
         {
             <partial name="_IncidentUpdate" model="u" />

@@ -5,13 +5,19 @@
     var isAdmin = User.IsInRole("Admin");
 }
 
-<h1>Incidents</h1>
+<h1 class="h3 mb-3">
+    <i class="bi bi-exclamation-triangle me-1"></i>Incidents
+</h1>
 
 @if (isAdmin)
 {
     <p>
-        <a asp-page="/Admin/Incidents/Create" class="btn btn-primary">Nouvel incident</a>
-        <a asp-page="Index" asp-page-handler="Export" class="btn btn-outline-secondary">Exporter CSV</a>
+        <a asp-page="/Admin/Incidents/Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>Nouvel incident
+        </a>
+        <a asp-page="Index" asp-page-handler="Export" class="btn btn-outline-secondary">
+            <i class="bi bi-download me-1"></i>Exporter CSV
+        </a>
     </p>
 }
 
@@ -23,18 +29,18 @@
         <div class="col-md-3">
             <select asp-for="Statut" class="form-select">
                 <option value="">tous les statuts</option>
-                <option value="investigating">investigating</option>
-                <option value="identified">identified</option>
-                <option value="monitoring">monitoring</option>
-                <option value="resolved">resolved</option>
+                <option value="investigating">En investigation</option>
+                <option value="identified">Identifié</option>
+                <option value="monitoring">Surveillance</option>
+                <option value="resolved">Résolu</option>
             </select>
         </div>
         <div class="col-md-3">
             <select asp-for="Severite" class="form-select">
                 <option value="">toutes les sévérités</option>
-                <option value="minor">minor</option>
-                <option value="major">major</option>
-                <option value="critical">critical</option>
+                <option value="minor">Mineur</option>
+                <option value="major">Majeur</option>
+                <option value="critical">Critique</option>
             </select>
         </div>
         <div class="col-md-1">
@@ -43,44 +49,54 @@
     </div>
 </form>
 
-<p>@Model.TotalCount incident(s) trouvé(s) - page @Model.CurrentPage / @Model.TotalPages</p>
+<p class="text-muted small">@Model.TotalCount incident(s) trouvé(s) — page @Model.CurrentPage / @Model.TotalPages</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Titre</th>
-            <th>Service</th>
-            <th>Sévérité</th>
-            <th>Statut</th>
-            <th>Début</th>
-            <th>Fin</th>
-            @if (isAdmin)
-            {
-                <th></th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var i in Model.Incidents)
-    {
-        <tr>
-            <td><a asp-page="Details" asp-route-id="@i.Id">@i.Titre</a></td>
-            <td>@i.ServiceNom</td>
-            <td>@i.Severite</td>
-            <td>@i.Statut</td>
-            <td>@i.DateDebut.ToString("dd/MM/yyyy HH:mm")</td>
-            <td>@(i.DateFin?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
-            @if (isAdmin)
-            {
+<div class="table-responsive shadow-sm">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Titre</th>
+                <th>Service</th>
+                <th>Sévérité</th>
+                <th>Statut</th>
+                <th>Début</th>
+                <th>Fin</th>
+                @if (isAdmin)
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var i in Model.Incidents)
+        {
+            <tr>
                 <td>
-                    <a asp-page="/Admin/Incidents/Edit" asp-route-id="@i.Id" class="btn btn-sm btn-outline-secondary">Modifier</a>
-                    <a asp-page="/Admin/Incidents/Delete" asp-route-id="@i.Id" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                    <a asp-page="Details" asp-route-id="@i.Id" class="text-decoration-none fw-semibold">
+                        @i.Titre
+                    </a>
                 </td>
-            }
-        </tr>
-    }
-    </tbody>
-</table>
+                <td>@i.ServiceNom</td>
+                <td><partial name="_StatusBadge" model="@i.Severite" /></td>
+                <td><partial name="_StatusBadge" model="@i.Statut" /></td>
+                <td class="small">@i.DateDebut.ToString("dd/MM/yyyy HH:mm")</td>
+                <td class="small">@(i.DateFin?.ToString("dd/MM/yyyy HH:mm") ?? "—")</td>
+                @if (isAdmin)
+                {
+                    <td>
+                        <a asp-page="/Admin/Incidents/Edit" asp-route-id="@i.Id" class="btn btn-sm btn-outline-secondary" title="Modifier">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a asp-page="/Admin/Incidents/Delete" asp-route-id="@i.Id" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
 
 @if (Model.TotalPages > 1)
 {

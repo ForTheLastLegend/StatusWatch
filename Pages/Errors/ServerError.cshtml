@@ -5,10 +5,11 @@
 }
 
 <div class="text-center py-5">
-    <h1 class="display-4">500</h1>
-    <h2>Erreur serveur</h2>
-    <p class="text-muted">Une erreur inattendue est survenue. Réessaye dans un instant.</p>
-    <p>
-        <a asp-page="/Index" class="btn btn-primary">Retour à l'accueil</a>
-    </p>
+    <i class="bi bi-exclamation-octagon display-1 text-danger"></i>
+    <h1 class="display-3 fw-bold mt-3 mb-0">500</h1>
+    <h2 class="h4 text-muted mb-3">Erreur serveur</h2>
+    <p class="text-muted mb-4">Une erreur inattendue est survenue. Veuillez réessayer dans un instant.</p>
+    <a asp-page="/Index" class="btn btn-primary">
+        <i class="bi bi-house me-1"></i>Retour à l'accueil
+    </a>
 </div>
