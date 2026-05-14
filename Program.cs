@@ -2,6 +2,7 @@ using System.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Npgsql;
 using StatusWatch.BackgroundServices;
+using StatusWatch.Endpoints;
 using StatusWatch.Helpers;
 using StatusWatch.Models;
 using StatusWatch.Services;
@@ -22,6 +23,8 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddHttpClient();
 builder.Services.AddHostedService<PingBackgroundService>();
 
+builder.Services.AddOpenApi();
+
 builder.Services
     .AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", options =>
@@ -37,6 +40,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    app.MapOpenApi();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/openapi/v1.json", "StatusWatch API"));
 }
 else
 {
@@ -56,5 +61,7 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+app.MapStatusEndpoints();
 
 app.Run();

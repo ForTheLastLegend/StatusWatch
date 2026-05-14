@@ -21,6 +21,7 @@ public class CreateModel : PageModel
     public List<SelectListItem> StatutOptions { get; } = new()
     {
         new("investigating", "investigating"),
+        new("identified", "identified"),
         new("monitoring", "monitoring"),
         new("resolved", "resolved")
     };
