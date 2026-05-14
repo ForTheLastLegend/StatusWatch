@@ -1,0 +1,8 @@
+@model StatusWatch.Models.IncidentUpdate
+
+<li class="list-group-item">
+    <div class="d-flex justify-content-between">
+        <small class="text-muted">@Model.DateCreation.ToString("dd/MM/yyyy HH:mm")</small>
+    </div>
+    <p class="mb-0 mt-1">@Model.Message</p>
+</li>

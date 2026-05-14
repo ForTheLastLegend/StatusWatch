@@ -1,0 +1,47 @@
+@page "/Admin/Incidents/{id:int}/Updates"
+@model StatusWatch.Pages.Admin.Incidents.UpdatesModel
+@{
+    ViewData["Title"] = $"Mises à jour - {Model.Incident.Titre}";
+}
+
+<p><a asp-page="/Incidents/Index">&larr; Retour aux incidents</a></p>
+
+<h1>Mises à jour</h1>
+<h4 class="text-muted">@Model.Incident.Titre</h4>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h3>Publier une mise à jour</h3>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="NewUpdate.Message" class="form-label">Message</label>
+                <textarea asp-for="NewUpdate.Message" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="NewUpdate.Message" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Publier</button>
+            <a asp-page="/Incidents/Details" asp-route-id="@Model.Incident.Id" class="btn btn-secondary">Voir côté public</a>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Historique (@Model.Updates.Count)</h3>
+        @if (Model.Updates.Count == 0)
+        {
+            <p class="text-muted">Aucune mise à jour pour le moment.</p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var u in Model.Updates)
+                {
+                    <partial name="_IncidentUpdate" model="u" />
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

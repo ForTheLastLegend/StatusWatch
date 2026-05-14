@@ -6,7 +6,15 @@
 
 <p><a asp-page="Index">&larr; Retour à la liste</a></p>
 
-<h1>@Model.Incident.Titre</h1>
+<div class="d-flex justify-content-between align-items-start">
+    <h1>@Model.Incident.Titre</h1>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-page="/Admin/Incidents/Updates" asp-route-id="@Model.Incident.Id" class="btn btn-outline-primary">
+            Gérer les mises à jour
+        </a>
+    }
+</div>
 
 <dl>
     <dt>Service</dt>
@@ -27,3 +35,18 @@
     <dt>Description</dt>
     <dd>@Model.Incident.Description</dd>
 </dl>
+
+<h3 class="mt-4">Mises à jour</h3>
+@if (Model.Updates.Count == 0)
+{
+    <p class="text-muted">Aucune mise à jour publiée.</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var u in Model.Updates)
+        {
+            <partial name="_IncidentUpdate" model="u" />
+        }
+    </ul>
+}

@@ -14,6 +14,7 @@ var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connStr));
 builder.Services.AddScoped<ServiceService>();
 builder.Services.AddScoped<IncidentService>();
+builder.Services.AddScoped<IncidentUpdateService>();
 builder.Services.AddScoped<UserService>();
 
 builder.Services
