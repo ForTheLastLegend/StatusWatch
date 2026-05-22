@@ -175,7 +175,19 @@ SELECT
 FROM generate_series(0, 200) AS gs;
 
 -- ============================================================
--- Utilisateurs : non touches par ce seed
--- L'admin existant (admin@statuswatch.local / Admin1234!) reste en place.
+-- Utilisateurs : compte admin de demo
+-- Identifiants : admin@statuswatch.local / Admin1234!
+-- Hash PBKDF2-HMACSHA512, 100k iter, salt 16o, hash 64o (format "saltB64.hashB64")
+-- genere via PasswordHelper.Hash equivalent (cf. Helpers/PasswordHelper.cs)
+-- UPSERT : si l'admin existe deja, on remet ses credentials a Admin1234! (seed idempotent)
 -- Pour creer d'autres comptes, utiliser /Account/Register depuis l'app.
 -- ============================================================
+INSERT INTO users (nom, email, password_hash, role) VALUES
+    ('Admin StatusWatch',
+     'admin@statuswatch.local',
+     'HJvGSj55S39W7Epi9dxTyA==.CXzu2RyVQJDcZUpKSuMQ4GJ6kd3fIbnvqk6NpaGWOzgLD3uGWahHjd+a5bWo4bO8DC3+vpuv4CeHehePN+RdzQ==',
+     'Admin')
+ON CONFLICT (email) DO UPDATE
+    SET password_hash = EXCLUDED.password_hash,
+        role          = EXCLUDED.role,
+        nom           = EXCLUDED.nom;
