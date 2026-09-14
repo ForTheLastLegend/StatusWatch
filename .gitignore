@@ -1,0 +1,40 @@
+# .NET
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+publish/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.publishsettings
+
+# IDE
+.vs/
+.idea/
+.vscode/
+*.DotSettings.user
+
+# Outils IA / Claude Code
+.claude/
+claude/
+
+# Secrets et configuration locale
+appsettings.Production.json
+appsettings.*.local.json
+.env
+.env.local
+
+# Front (si ajout de Next.js plus tard)
+node_modules/
+.next/
+
+# Logs et uploads
+logs/
+*.log
+wwwroot/uploads/*
+!wwwroot/uploads/.gitkeep
+
+# Système
+.DS_Store
+Thumbs.db
